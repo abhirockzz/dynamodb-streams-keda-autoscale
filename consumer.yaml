@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamodb-streams-kcl-consumer-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dynamodb-streams-kcl-consumer-app
+  template:
+    metadata:
+      labels:
+        app: dynamodb-streams-kcl-consumer-app
+    spec:
+      serviceAccountName: dynamodb-streams-kcl-consumer-app-sa
+      containers:
+        - name: dynamodb-streams-kcl-consumer-app
+          image: <enter ECR docker image>
+          imagePullPolicy: Always
+          env:
+            - name: TARGET_TABLE_NAME
+              value: users_replica
+            - name: APPLICATION_NAME
+              value: dynamodb-streams-kcl-app-demo
+            - name: SOURCE_TABLE_STREAM_ARN
+              value: <enter DynamoDB Streams ARN>
+            - name: AWS_REGION
+              value: us-east-1
+            - name: INSTANCE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name

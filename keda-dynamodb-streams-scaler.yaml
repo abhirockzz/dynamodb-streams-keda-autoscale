@@ -1,0 +1,14 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name:  aws-dynamodb-streams-scaledobject
+spec:
+  scaleTargetRef:
+    name: dynamodb-streams-kcl-consumer-app
+  triggers:
+  - type: aws-dynamodb-streams
+    metadata:
+      awsRegion: us-east-1
+      tableName: users
+      shardCount: "2"
+      identityOwner: "operator"
